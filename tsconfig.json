@@ -29,5 +29,9 @@
     "**/*.cjs",
     "**/*.mjs"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "tailwind.config.cjs",
+    "src/server/api/routers/topic.ts"
+  ]
 }
