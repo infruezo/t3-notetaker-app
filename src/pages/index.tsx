@@ -72,59 +72,65 @@ const Content: React.FC = () => {
 
   return (
     <div className="mx-5 mt-5 grid grid-cols-4 gap-2">
-      <div className="px-2">
-        <ul className="menu rounded-box w-56 bg-base-100 p-2">
-          {topics?.map((topic) => (
-            <li key={topic.id}>
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectedTopic(topic);
-                }}
-              >
-                {topic.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <div className="divider"></div>
-        <input
-          type="text"
-          placeholder="New Topic"
-          className="input-bordered input input-sm w-full"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              createTopic.mutate({
-                title: e.currentTarget.value,
-              });
-              e.currentTarget.value = "";
-            }
-          }}
-        />
-      </div>
-      <div className="col-span-3">
-        <div>
-          {notes?.map((note) => (
-            <div key={note.id} className="mt-5">
-              <NoteCard
-                note={note}
-                onDelete={() => void deleteNote.mutate({ id: note.id })}
-              />
+      {sessionData?.user ? (
+        <>
+          <div className="px-2">
+            <ul className="menu rounded-box w-56 bg-base-100 p-2">
+              {topics?.map((topic) => (
+                <li key={topic.id}>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedTopic(topic);
+                    }}
+                  >
+                    {topic.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="divider"></div>
+            <input
+              type="text"
+              placeholder="New Topic"
+              className="input-bordered input input-sm w-full"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  createTopic.mutate({
+                    title: e.currentTarget.value,
+                  });
+                  e.currentTarget.value = "";
+                }
+              }}
+            />
+          </div>
+          <div className="col-span-3">
+            <div>
+              {notes?.map((note) => (
+                <div key={note.id} className="mt-5">
+                  <NoteCard
+                    note={note}
+                    onDelete={() => void deleteNote.mutate({ id: note.id })}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <NoteEditor
-          onSave={({ title, content }) => {
-            void createNote.mutate({
-              title,
-              content,
-              topicId: selectedTopic?.id ?? "",
-            });
-          }}
-        />
-      </div>
+            <NoteEditor
+              onSave={({ title, content }) => {
+                void createNote.mutate({
+                  title,
+                  content,
+                  topicId: selectedTopic?.id ?? "",
+                });
+              }}
+            />
+          </div>
+        </>
+      ) : (
+        <div>Please Log in to get Started!</div>
+      )}
     </div>
   );
 };
